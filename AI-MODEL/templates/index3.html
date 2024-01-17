@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fight Detection Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        h1 {
+            color: #333;
+        }
+        #video-container {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+        }
+        #alert-frame {
+            margin-top: 20px;
+        }
+        #alert-message {
+            margin-top: 20px;
+            font-weight: bold;
+            color: red;
+        }
+    </style>
+    <script>
+        // Update the webpage based on the fight detection confidence
+        function updatePage(percent) {
+            console.log("Current Percent:", percent);
+            var alertMessage = document.getElementById("alert-message");
+            if (percent >= 0.9) {
+                alertMessage.textContent = "Fight Detected!";
+            } else {
+                alertMessage.textContent = "";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Fight Detection Dashboard</h1>
+    <p>Current Fight Detection Confidence: <span id="confidence">{{ percent|default("N/A") }}</span></p>
+
+    <div id="video-container">
+        <img src="{{ url_for('video_feed') }}" alt="Video Feed" width="640" height="480">
+    </div>
+    <div> <p id="alert-message"></p></div>
+    <div id="alert-frame">
+        <h2>Alert Frame</h2>
+       
+        {% if url_for('alert_frame') %}
+            <img src="{{ url_for('alert_frame') }}" alt="Alert Frame" width="640" height="480">
+        {% else %}
+            <p>No alert frame available</p>
+        {% endif %}
+    </div>
+    <script>
+        var initialPercent = parseFloat(document.getElementById("confidence").textContent);
+        console.log("Initial Percent:", initialPercent);
+        updatePage(initialPercent);
+    </script>
+    
+</body>
+</html>
